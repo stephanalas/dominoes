@@ -38,4 +38,5 @@ export default class Domino {
       return domino;
     };
   }
+  get() {}
 }
