@@ -20,17 +20,25 @@ export default class DominoHandler {
       let x = 200;
       let y = 200;
       dominoes.map((domino, idx) => {
-        if (idx % 7 === 0) {
-          x += 50;
-          y = 200;
+        if (idx % 9 === 0) {
+          // x += 50;
+          // y = 200;
+          y += 30;
+          x = 200;
         }
         // every 6 elements after the first two elements are twin dominoes
         // 0 != 0, 0
         if (idx === 0) {
-          domino.render(x, y, 'blanks', idx);
+          console.log('made it through');
+          domino.render(x, y, 'blanks', 2);
+        } else {
+          // if ()
+          // decide if current element and next element are the same
+          // if they are the same then we
+          // we are going to save element frame as default frame and the next element as inverseFrame
+          domino.render(x, y, 'player', idx - 1);
         }
-        domino.render(x, y, 'player', idx);
-        y += 30;
+        x += 50;
       });
       this.layoutDominoes = (x, y) => {
         let deltaY = y;

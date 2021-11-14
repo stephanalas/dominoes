@@ -6,6 +6,7 @@ export default class Domino {
     this.inverseLeft = points[1];
     this.inverseRight = points[0];
     this.frame;
+    this.inverseFrame;
     this.renderBlank = () => {};
     this.render = (x, y, type, frame) => {
       // render dominos in game as player dominos
