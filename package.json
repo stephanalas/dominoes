@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "start": "webpack-dev-server --config webpack/base.js --open",
+    "start-server": "nodemon server --ignore src",
+    "build:dev": "NODE_ENV=development webpack --config webpack/base.js",
+    "start:dev": "npm run build:dev & npm run start-server"
   },
   "repository": {
     "type": "git",
@@ -19,20 +22,24 @@
   },
   "homepage": "https://github.com/photonstorm/phaser3-project-template#readme",
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
-    "babel-loader": "^8.0.6",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^3.0.0",
-    "file-loader": "^4.2.0",
+    "file-loader": "^4.3.0",
     "html-webpack-plugin": "^3.2.0",
+    "morgan": "^1.10.0",
     "raw-loader": "^3.1.0",
-    "terser-webpack-plugin": "^2.2.1",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
+    "terser-webpack-plugin": "^2.3.8",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.3",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "phaser": "^3.50.0"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.15",
+    "phaser": "^3.55.2",
+    "socket.io": "^4.3.2"
   }
 }
