@@ -1,6 +1,7 @@
 import UIHandler from '../helpers/uiHandler';
 import whiteDominoesImage from '../assets/black_and_white_dominoes.png';
 import blankDominoesImage from '../assets/blanks.png';
+import DominoHandler from '../helpers/DominoHandler';
 export default class Game extends Phaser.Scene {
   constructor() {
     super({
@@ -21,8 +22,10 @@ export default class Game extends Phaser.Scene {
   }
   create() {
     this.UIHandler = new UIHandler(this);
-    this.UIHandler.buildUI();
-    this.add.image(500, 400, 'white_dominoes');
+    this.UIHandler.buildSinglePlayerUI();
+    this.DominoHandler = new DominoHandler(this);
+    // this.DominoHandler.layoutDominoes(200, 200);
+    this.DominoHandler.createAllDominoes();
   }
   update() {}
 }
