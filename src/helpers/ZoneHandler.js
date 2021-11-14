@@ -10,9 +10,29 @@ export default class ZoneHandler {
       });
       return player1DropZone;
     };
+    this.renderTeammateZone = (x, y) => {
+      let teammateZone = scene.add
+        .zone(x, y, 400, 64)
+        .setRectangleDropZone(400, 64);
+
+      teammateZone.setData({
+        dominoes: 0,
+      });
+      return teammateZone;
+    };
+    this.renderOpponentZone = (x, y) => {
+      let opponentZone = scene.add
+        .zone(x, y, 64, 350)
+        .setRectangleDropZone(64, 350);
+
+      opponentZone.setData({
+        dominoes: 0,
+      });
+      return opponentZone;
+    };
     this.renderGameZone = (x, y) => {
       let ZONE_WIDTH = 640;
-      let ZONE_HEIGHT = 410;
+      let ZONE_HEIGHT = 420;
       // add zone but doesn't show outline
       let dropZone = scene.add
         .zone(x, y, ZONE_WIDTH, ZONE_HEIGHT)
