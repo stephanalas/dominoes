@@ -6,19 +6,13 @@ export default class UIHandler {
 
     this.buildZones = () => {
       //parameters are for position not width/height
-      const {
-        renderGameZone,
-        renderOutline,
-        renderPlayer1Zone,
-        renderTeammateZone,
-        renderOpponentZone,
-      } = this.zoneHandler;
-      scene.gameZone = renderGameZone(400, 290);
-      scene.player1Zone = renderPlayer1Zone(400, 550);
-      scene.teammateZone = renderTeammateZone(400, 40);
-      scene.opponent1Zone = renderOpponentZone(40, 290);
+      const { renderZone, renderOutline } = this.zoneHandler;
+      scene.gameZone = renderZone(400, 290, 'game');
+      scene.player1Zone = renderZone(400, 550, 'player');
+      scene.teammateZone = renderZone(400, 40, 'teammate');
+      scene.opponent1Zone = renderZone(40, 290, 'opponent');
+      scene.opponent2Zone = renderZone(760, 290, 'opponent');
       renderOutline(scene.opponent1Zone);
-      scene.opponent2Zone = renderOpponentZone(760, 290);
       renderOutline(scene.opponent2Zone);
       renderOutline(scene.gameZone);
       renderOutline(scene.player1Zone);
