@@ -1,36 +1,37 @@
 export default class Domino {
-  constructor(scene, points) {
-    this.points = points;
-    this.left = points[0];
-    this.right = points[1];
-    this.inverseLeft = points[1];
-    this.inverseRight = points[0];
-    this.frame;
-    this.inverseFrame;
+  constructor(scene, dominoConfig) {
+    this.left = dominoConfig.left;
+    this.right = dominoConfig.right;
+    this.points = dominoConfig.left + dominoConfig.right;
+    this.inverseLeft = this.right;
+    this.inverseRight = this.left;
+    this.sprite = dominoConfig.sprite;
+    this.frame = dominoConfig.frame;
+    this.inverseFrame = dominoConfig.inverseFrame;
+    this.isDouble = dominoConfig.isDouble;
     this.renderBlank = () => {};
-    this.render = (x, y, type, frame) => {
+    this.render = (x, y, type = 'player', inverse = false) => {
       // render dominos in game as player dominos
-      let sprite;
-      if (type === 'player') {
-        sprite = 'white_dominoes';
+      if (type === 'player' || (this.left && this.right)) {
+        this.sprite = 'white_dominoes';
       } else {
-        sprite = 'blanks';
+        this.sprite = 'blanks';
       }
       // .sprite you can set frame from spritesheet
       let domino = scene.add
-        .sprite(x, y, sprite, frame)
+        .sprite(x, y, this.sprite, this.frame)
         .setScale(2, 2)
         .setInteractive()
         .setData({
-          left: this.points[0],
-          right: this.points[1],
-          frame: frame,
+          left: this.left,
+          right: this.right,
+          frame: this.frame,
 
           inverseLeft: this.inverseLeft,
           inverseRight: this.inverseRight,
           type: type,
-          sprite: sprite,
-          totalPoints: this.points.reduce((a, b) => a + b, 0),
+          sprite: this.sprite,
+          totalPoints: this.points,
         });
       if (type === 'player') {
         scene.input.setDraggable(domino);
@@ -38,5 +39,4 @@ export default class Domino {
       return domino;
     };
   }
-  get() {}
 }
