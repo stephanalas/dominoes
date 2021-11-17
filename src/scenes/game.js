@@ -31,11 +31,17 @@ export default class Game extends Phaser.Scene {
     this.DominoHandler.createDominoes();
     // this.DominoHandler.layoutDominoes(250, 200, this.dominoes);
 
-    const currentGame = this.GameHandler.createGame('singlePlayer', 2);
-    setTimeout(() => {
-      this.GameHandler.startGame();
-      console.log('game has started');
-    }, 5000);
+    const currentGame = this.GameHandler.createGame('singlePlayer', [
+      'curvy',
+      'bot',
+    ]);
+    this.GameHandler.startGame();
+    console.log('game has started');
+
+    this.input.on('drag', (pointer, gameObj, dragX, dragY) => {
+      gameObj.x = dragX;
+      gameObj.y = dragY;
+    });
   }
   update() {}
 }
