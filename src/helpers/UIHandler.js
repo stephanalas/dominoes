@@ -13,23 +13,23 @@ export default class UIHandler {
 
     this.buildMultiplayerAreas = () => {
       scene.playerDominoArea = scene.add.rectangle(400, 550, 500, 80);
-      scene.playerDominoArea.setStrokeStyle(4, 0xff69b4);
+      scene.playerDominoArea.setStrokeStyle(4, 0x000ff);
       scene.teammateArea = scene.add.rectangle(400, 40, 400, 64);
-      scene.teammateArea.setStrokeStyle(4, 0xff69b4);
+      scene.teammateArea.setStrokeStyle(4, 0x000ff);
       scene.opponent1Area = scene.add.rectangle(40, 290, 64, 350);
-      scene.opponent1Area.setStrokeStyle(4, 0xff69b4);
+      scene.opponent1Area.setStrokeStyle(4, 0x000ff);
       scene.opponent2Area = scene.add.rectangle(760, 290, 64, 350);
-      scene.opponent2Area.setStrokeStyle(4, 0xff69b4);
+      scene.opponent2Area.setStrokeStyle(4, 0x000ff);
     };
 
     this.build1v1 = () => {
       scene.playerDominoArea = scene.add.rectangle(400, 550, 500, 80);
-      scene.playerDominoArea.setStrokeStyle(4, 0xff69b4);
+      scene.playerDominoArea.setStrokeStyle(4, 0x000ff);
       scene.opponentArea = scene.add.rectangle(400, 40, 400, 64);
-      scene.opponentArea.setStrokeStyle(4, 0xff69b4);
+      scene.opponentArea.setStrokeStyle(4, 0x000ff);
 
       scene.spareDominoesArea = scene.add.rectangle(40, 300, 64, 300);
-      scene.spareDominoesArea.setStrokeStyle(4, 0xff69b4);
+      scene.spareDominoesArea.setStrokeStyle(4, 0x000ff);
     };
     this.buildGameText = () => {
       scene.gameTitle = scene.add
