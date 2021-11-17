@@ -10,7 +10,8 @@ export default class UIHandler {
       scene.gameZone = renderZone(400, 290);
       renderOutline(scene.gameZone);
     };
-    this.buildPlayerAreas = () => {
+
+    this.buildMultiplayerAreas = () => {
       scene.playerDominoArea = scene.add.rectangle(400, 550, 500, 80);
       scene.playerDominoArea.setStrokeStyle(4, 0xff69b4);
       scene.teammateArea = scene.add.rectangle(400, 40, 400, 64);
@@ -57,7 +58,7 @@ export default class UIHandler {
     };
     this.buildUI = () => {
       this.buildZones();
-      this.buildPlayerAreas();
+      this.buildMultiplayerAreas();
       this.buildGameText();
     };
     this.buildSinglePlayerUI = () => {
