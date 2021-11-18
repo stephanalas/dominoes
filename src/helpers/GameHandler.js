@@ -15,7 +15,7 @@ export default class GameHandler {
       for (let name of players) {
         this.currentPlayerHands[name] = [];
       }
-      scene.DominoHandler.layoutDominoes(250, 200);
+      // scene.DominoHandler.layoutDominoes(250, 200);
       return this.currentGame;
     };
     this.startGame = () => {
@@ -40,6 +40,7 @@ export default class GameHandler {
       }
       console.log(this.currentPlayerHands);
       this.renderPlayersHands();
+      this.renderDominoPile(40, 100);
       // have player's name to determine which hand to give dominoes
 
       // deal shuffled dominoes
@@ -52,20 +53,62 @@ export default class GameHandler {
       const playerFrames = this.currentPlayerHands[this.firstPlayer].map(
         (domino) => domino.frame
       );
+      const opponentFrames = this.currentPlayerHands[this.secondPlayer].map(
+        (domino) => domino.frame
+      );
+      console.log(opponentFrames);
+      // create empty phaser group to game scene
+      // iterate through player hand
+      // check domino for points
+      // if points === 0 then sprite = 'blanks'
+      // add to empty group
+
       const playerDominoesGroup = scene.add.group([
         {
           key: 'white_dominoes',
           frame: playerFrames,
           setScale: { x: 2, y: 2 },
           setXY: {
-            x: 200,
-            y: 525,
-            stepX: 30,
+            x: 250,
+            y: 550,
+            stepX: 45,
+            stepY: 0,
+          },
+        },
+      ]);
+      const opponentDominoesGroup = scene.add.group([
+        {
+          key: 'white_dominoes',
+          frame: opponentFrames,
+          setScale: { x: 2, y: 2 },
+          setXY: {
+            x: 250,
+            y: 40,
+            stepX: 45,
             stepY: 0,
           },
         },
       ]);
       playerDominoesGroup.rotate(1.5708);
+      opponentDominoesGroup.rotate(1.5708);
+      scene.InteractivityHandler.setGroupInteractive(
+        playerDominoesGroup.children.entries
+      );
+    };
+    this.checkForBlank = (group) => {
+      group.children.entries.map;
+    };
+    this.renderDominoPile = (x, y) => {
+      // when rendering dominos, dominos do not have data associated unless it is render using instance function
+      const dominoPileSprites = this.dominoPile.map((domino) =>
+        !domino.points ? domino.render(0, 0, 'blanks') : domino.render(0, 0)
+      );
+      const dominoPileGroup = new Phaser.GameObjects.Group();
+      dominoPileSprites.forEach((domino) =>
+        dominoPileGroup.children.entries.push(domino)
+      );
+
+      dominoPileGroup.setXY(x, y, 0, 25);
     };
     this.endGame = () => {
       this.currentGame = null;
