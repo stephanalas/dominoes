@@ -33,7 +33,7 @@ export default class Domino {
           sprite: this.sprite,
           totalPoints: this.points,
         });
-      if (type === 'player') {
+      if (type === 'player' || (!this.points && type)) {
         scene.input.setDraggable(domino);
       }
       return domino;
