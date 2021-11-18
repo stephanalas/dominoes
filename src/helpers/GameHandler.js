@@ -100,14 +100,19 @@ export default class GameHandler {
     };
     this.renderDominoPile = (x, y) => {
       // when rendering dominos, dominos do not have data associated unless it is render using instance function
+
+      // stores domino sprites while looking for blank domino to render blank
       const dominoPileSprites = this.dominoPile.map((domino) =>
         !domino.points ? domino.render(0, 0, 'blanks') : domino.render(0, 0)
       );
+
+      // new domino group
       const dominoPileGroup = new Phaser.GameObjects.Group();
+      // adding sprites to group
       dominoPileSprites.forEach((domino) =>
         dominoPileGroup.children.entries.push(domino)
       );
-
+      // position dominoes
       dominoPileGroup.setXY(x, y, 0, 25);
     };
     this.endGame = () => {
