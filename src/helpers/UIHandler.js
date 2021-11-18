@@ -10,6 +10,9 @@ export default class UIHandler {
       scene.gameZone = renderZone(400, 290);
       renderOutline(scene.gameZone);
     };
+    this.buildGrid = () => {
+      scene.add.grid(400, 300, 800, 600, 64, 64, 0x0000, 50);
+    };
 
     this.buildMultiplayerAreas = () => {
       scene.playerDominoArea = scene.add.rectangle(400, 550, 500, 80);
