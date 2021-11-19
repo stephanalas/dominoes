@@ -40,6 +40,7 @@ export default class DominoHandler {
         });
       }
     };
+
     this.shuffleDominoes = () => {
       function shuffle(array) {
         var m = array.length,
