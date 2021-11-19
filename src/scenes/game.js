@@ -26,6 +26,7 @@ export default class Game extends Phaser.Scene {
     this.UIHandler = new UIHandler(this);
     this.DominoHandler = new DominoHandler(this);
     this.GameHandler = new GameHandler(this);
+    console.log('gameHandler', this.GameHandler);
     this.InteractivityHandler = new InteractiveHandler(this);
     // this.DominoHandler.layoutDominoes(200, 200);
 
@@ -48,9 +49,8 @@ export default class Game extends Phaser.Scene {
     });
   }
   update() {
-    if (this.currentGame.currentTurn === 'curvy') {
-      console.log('curvys turn');
-    } else console.log('bots turn');
+    if (!this.currentGame.active) {
+    }
 
     // players hands
     // domino chain

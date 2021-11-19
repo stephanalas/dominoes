@@ -11,6 +11,7 @@ export default class Game {
     this.currentPlayerHands = {};
     this.dominoPile = [];
     // linked list VVVVVV
+    this.active = false;
     this.dominoChain = null;
   }
 }
