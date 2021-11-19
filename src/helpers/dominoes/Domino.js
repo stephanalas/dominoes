@@ -1,5 +1,6 @@
 export default class Domino {
   constructor(scene, dominoConfig) {
+    this.name = 'domino';
     this.left = dominoConfig.left;
     this.right = dominoConfig.right;
     this.points = dominoConfig.left + dominoConfig.right;
@@ -8,6 +9,8 @@ export default class Domino {
     this.sprite = dominoConfig.sprite;
     this.frame = dominoConfig.frame;
     this.inverseFrame = dominoConfig.inverseFrame;
+    this.next = null;
+    this.previous = null;
     this.isDouble = dominoConfig.isDouble;
     this.renderBlank = () => {};
     this.render = (x, y, type = 'player', inverse = false) => {
@@ -26,7 +29,7 @@ export default class Domino {
           left: this.left,
           right: this.right,
           frame: this.frame,
-
+          name: this.name,
           inverseLeft: this.inverseLeft,
           inverseRight: this.inverseRight,
           type: type,
