@@ -6,5 +6,11 @@ export default class Game {
     this.hasEnded = false;
     this.winner = null;
     this.loser = null;
+    this.firstPlayer = null;
+    this.secondPlayer = null;
+    this.currentPlayerHands = {};
+    this.dominoPile = [];
+    // linked list VVVVVV
+    this.dominoChain = null;
   }
 }
