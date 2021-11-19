@@ -35,7 +35,7 @@ export default class Game extends Phaser.Scene {
     this.DominoHandler.createDominoes();
     // this.DominoHandler.layoutDominoes(250, 200, this.dominoes);
 
-    const currentGame = this.GameHandler.createGame('singlePlayer', [
+    this.currentGame = this.GameHandler.createGame('singlePlayer', [
       'curvy',
       'bot',
     ]);
@@ -47,5 +47,14 @@ export default class Game extends Phaser.Scene {
       gameObj.y = dragY;
     });
   }
-  update() {}
+  update() {
+    if (this.currentGame.currentTurn === 'curvy') {
+      console.log('curvys turn');
+    } else console.log('bots turn');
+
+    // players hands
+    // domino chain
+    // domino pile
+    //
+  }
 }
