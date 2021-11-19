@@ -2,8 +2,6 @@ import Game from './dominoes/Game';
 export default class GameHandler {
   constructor(scene) {
     this.currentGame = null;
-    this.currentPlayerHands = {};
-    this.dominoPile = [];
     this.createGame = (type, players) => {
       if (this.currentGame) {
         this.endGame();
@@ -12,35 +10,48 @@ export default class GameHandler {
         gameType: type,
         totalPlayers: players.length,
       });
+      // create player hands
       for (let name of players) {
-        this.currentPlayerHands[name] = [];
+        this.currentGame.currentPlayerHands[name] = [];
       }
-      // scene.DominoHandler.layoutDominoes(250, 200);
       return this.currentGame;
     };
     this.startGame = () => {
-      const names = Object.keys(this.currentPlayerHands);
-      this.firstPlayer = names[0];
-      this.secondPlayer = names[1];
+      const { currentPlayerHands, dominoPile } = this.currentGame;
+      // assign first and second player to game object
+      const names = Object.keys(currentPlayerHands);
+      this.currentGame.firstPlayer = names[0];
+      this.currentGame.secondPlayer = names[1];
+
+      // shuffle dominoes but not sprites of dominoes
       scene.DominoHandler.shuffleDominoes();
       const sceneDominoes = scene.DominoHandler.dominoes;
+
+      // the dominoes in pile and dominoes in players' hand should be sprites
+
+      // deal dominoes
+      // eventually move to dominoHandler as instance method
+      const { firstPlayer, secondPlayer } = this.currentGame;
       let giveToFirst = true;
       for (let dom of sceneDominoes) {
         if (
-          this.currentPlayerHands[this.firstPlayer].length === 7 &&
-          this.currentPlayerHands[this.secondPlayer].length === 7
+          currentPlayerHands[firstPlayer].length === 7 &&
+          currentPlayerHands[secondPlayer].length === 7
         ) {
-          this.dominoPile.push(dom);
+          dominoPile.push(dom);
         } else {
           giveToFirst
-            ? this.currentPlayerHands[this.firstPlayer].push(dom)
-            : this.currentPlayerHands[this.secondPlayer].push(dom);
+            ? currentPlayerHands[firstPlayer].push(dom)
+            : currentPlayerHands[secondPlayer].push(dom);
           giveToFirst = !giveToFirst;
         }
       }
-      console.log(this.currentPlayerHands);
+      // render both player hands
       this.renderPlayersHands();
+      // render dominoPile
       this.renderDominoPile(40, 100);
+      //
+      this.firstMove();
       // have player's name to determine which hand to give dominoes
 
       // deal shuffled dominoes
@@ -49,62 +60,46 @@ export default class GameHandler {
       // if no double six try double 5 etc
       // place dominoes in dropzone
     };
+    this.getSprites = (dominos) => {
+      return dominos.map((domino) =>
+        !domino.points ? domino.render(0, 0, 'blanks') : domino.render(0, 0)
+      );
+    };
     this.renderPlayersHands = () => {
-      const playerFrames = this.currentPlayerHands[this.firstPlayer].map(
-        (domino) => domino.frame
-      );
-      const opponentFrames = this.currentPlayerHands[this.secondPlayer].map(
-        (domino) => domino.frame
-      );
-      console.log(opponentFrames);
-      // create empty phaser group to game scene
-      // iterate through player hand
-      // check domino for points
-      // if points === 0 then sprite = 'blanks'
-      // add to empty group
+      const { currentPlayerHands } = this.currentGame;
 
-      const playerDominoesGroup = scene.add.group([
-        {
-          key: 'white_dominoes',
-          frame: playerFrames,
-          setScale: { x: 2, y: 2 },
-          setXY: {
-            x: 250,
-            y: 550,
-            stepX: 45,
-            stepY: 0,
-          },
-        },
-      ]);
-      const opponentDominoesGroup = scene.add.group([
-        {
-          key: 'white_dominoes',
-          frame: opponentFrames,
-          setScale: { x: 2, y: 2 },
-          setXY: {
-            x: 250,
-            y: 40,
-            stepX: 45,
-            stepY: 0,
-          },
-        },
-      ]);
+      // groups sprite from player hand and adds it to scene
+      const playerDominoSprites = this.getSprites(
+        currentPlayerHands[this.currentGame.firstPlayer]
+      );
+
+      const playerDominoesGroup = new Phaser.GameObjects.Group(scene);
+
+      // using Phaser group.addMultiple() loads debugger in browser. using this workaround for right now
+      playerDominoSprites.forEach((domino) =>
+        playerDominoesGroup.children.entries.push(domino)
+      );
+      playerDominoesGroup.setXY(250, 550, 45);
+
+      const opponentDominoSprites = this.getSprites(
+        currentPlayerHands[this.currentGame.secondPlayer]
+      );
+      const opponentDominoesGroup = new Phaser.GameObjects.Group(scene);
+
+      opponentDominoSprites.forEach((domino) => {
+        opponentDominoesGroup.children.entries.push(domino);
+      });
+      opponentDominoesGroup.setXY(250, 40, 45);
+
       playerDominoesGroup.rotate(1.5708);
       opponentDominoesGroup.rotate(1.5708);
+      // for dev testing
       scene.InteractivityHandler.setGroupInteractive(
         playerDominoesGroup.children.entries
       );
     };
-    this.checkForBlank = (group) => {
-      group.children.entries.map;
-    };
     this.renderDominoPile = (x, y) => {
-      // when rendering dominos, dominos do not have data associated unless it is render using instance function
-
-      // stores domino sprites while looking for blank domino to render blank
-      const dominoPileSprites = this.dominoPile.map((domino) =>
-        !domino.points ? domino.render(0, 0, 'blanks') : domino.render(0, 0)
-      );
+      const dominoPileSprites = this.getSprites(this.currentGame.dominoPile);
 
       // new domino group
       const dominoPileGroup = new Phaser.GameObjects.Group();
@@ -114,6 +109,67 @@ export default class GameHandler {
       );
       // position dominoes
       dominoPileGroup.setXY(x, y, 0, 25);
+      scene.dominoPileGroup = dominoPileGroup;
+    };
+    this.firstMove = () => {
+      const getHighestDouble = (dominos) => {
+        return dominos.reduce((domPoints, nextDom) => {
+          if (nextDom.points % 2 === 0 && nextDom.left === nextDom.right) {
+            if (domPoints < nextDom.points) {
+              return nextDom.points;
+            } else return domPoints;
+          }
+          return domPoints;
+        }, 0);
+      };
+
+      const player = this.currentGame.firstPlayer;
+      const opponent = this.currentGame.secondPlayer;
+
+      const currentHands = this.currentGame.currentPlayerHands;
+      const playerHand = currentHands[player];
+      const opponentHand = currentHands[opponent];
+
+      let playerHighestDouble = getHighestDouble(playerHand);
+      let opponentHighestDouble = getHighestDouble(opponentHand);
+      let highestDoubleSprite;
+      if (playerHighestDouble > opponentHighestDouble) {
+        highestDoubleSprite = this.getHighestDoubleSprite(
+          playerHand,
+          playerHighestDouble
+        );
+        this.currentGame.currentTurn = player;
+      } else {
+        highestDoubleSprite = this.getHighestDoubleSprite(
+          opponentHand,
+          opponentHighestDouble
+        );
+        this.currentGame.currentTurn = opponent;
+      }
+      console.log(highestDoubleSprite);
+      // we have to get current turn
+      // find double and remove from player Hand group
+    };
+    this.getHighestDoubleSprite = (playerhand, highestDouble) => {
+      return playerhand.filter((domino) => {
+        if (domino.points === highestDouble) {
+          return domino.render(0, 0);
+        }
+      });
+    };
+    this.playDomino = (sprite, playerHandGroup = null) => {
+      // remove domino from group
+      console.log(sprite);
+      // playerHandGroup.children.entries.filter(dominoSprite => {
+      //   console.log(sprite)
+      // })
+      // return domino
+    };
+    this.renderDominoChain = (startingDomino) => {
+      // startingDomino should be a sprite
+      this.playDomino(startingDomino);
+      const dominoChainGroup = new Phaser.GameObjects.Group(scene);
+      dominoChainGroup.children.entries.push(startingDomino);
     };
     this.endGame = () => {
       this.currentGame = null;
